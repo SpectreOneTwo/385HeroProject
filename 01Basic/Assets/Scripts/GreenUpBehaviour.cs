@@ -5,6 +5,7 @@ using UnityEngine;
 public class GreenUpBehaviour : MonoBehaviour
 {
     public float speed = 10f;
+    public float mHeroRotateSpeed = 90f / 2f; // 90-degrees in 2 seconds
     // Start is called before the first frame update
     void Start()
     {
@@ -19,22 +20,22 @@ public class GreenUpBehaviour : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W))
         {
-            pos.y += speed * Time.deltaTime;
+            pos += ((speed * Time.smoothDeltaTime) * transform.up);
         }
 
         if (Input.GetKey(KeyCode.S))
         {
-            pos.y -= speed * Time.deltaTime;
+            pos -= ((speed * Time.smoothDeltaTime) * transform.up);
         }
 
         if (Input.GetKey(KeyCode.D))
         {
-            pos.x += speed * Time.deltaTime;
+            transform.Rotate(transform.forward, -mHeroRotateSpeed * Time.smoothDeltaTime);
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            pos.x -= speed * Time.deltaTime;
+            transform.Rotate(transform.forward, mHeroRotateSpeed * Time.smoothDeltaTime);
         }
 
         transform.position = pos;

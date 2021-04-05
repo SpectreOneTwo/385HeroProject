@@ -5,39 +5,61 @@ using UnityEngine;
 public class GreenUpBehaviour : MonoBehaviour
 {
     public float speed = 10f;
-    public float mHeroRotateSpeed = 90f / 2f; // 90-degrees in 2 seconds
+    public float mHeroRotateSpeed = 100f / 2f; // 90-degrees in 2 seconds
+    public bool mFollowMousePosition = true;
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            mFollowMousePosition = !mFollowMousePosition;
+        }
         Vector3 pos = transform.position;
 
-        if (Input.GetKey(KeyCode.W))
+        if (mFollowMousePosition)
         {
-            pos += ((speed * Time.smoothDeltaTime) * transform.up);
+            pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Debug.Log("Position is " + pos);
+            pos.z = 0f;  // <-- this is VERY IMPORTANT!
+            // Debug.Log("Screen Point:" + Input.mousePosition + "  World Point:" + p);
         }
-
-        if (Input.GetKey(KeyCode.S))
+        else
         {
-            pos -= ((speed * Time.smoothDeltaTime) * transform.up);
-        }
+            if (Input.GetKey(KeyCode.W))
+            {
+                pos += ((speed * Time.smoothDeltaTime) * transform.up);
+            }
 
-        if (Input.GetKey(KeyCode.D))
+            if (Input.GetKey(KeyCode.S))
+            {
+                pos -= ((speed * Time.smoothDeltaTime) * transform.up);
+            }
+
+            if (Input.GetKey(KeyCode.D))
+            {
+                transform.Rotate(transform.forward, -mHeroRotateSpeed * Time.smoothDeltaTime);
+            }
+
+            if (Input.GetKey(KeyCode.A))
+            {
+                transform.Rotate(transform.forward, mHeroRotateSpeed * Time.smoothDeltaTime);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            transform.Rotate(transform.forward, -mHeroRotateSpeed * Time.smoothDeltaTime);
+            // Prefab MUST BE locaed in Resources/Prefab folder!
+            GameObject e = Instantiate(Resources.Load("Prefabs/Egg") as GameObject); 
+            e.transform.localPosition = transform.localPosition;
+            e.transform.rotation = transform.rotation;
+            Debug.Log("Spawn Eggs:" + e.transform.localPosition);
         }
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.Rotate(transform.forward, mHeroRotateSpeed * Time.smoothDeltaTime);
-        }
-
         transform.position = pos;
     }
 }

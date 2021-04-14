@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class GameController : MonoBehaviour
 {
@@ -29,6 +30,7 @@ public class GameController : MonoBehaviour
         if (numberOfPlanes < maxPlanes)
         {
             CameraSupport s = Camera.main.GetComponent<CameraSupport>();
+            Assert.IsTrue(s != null);
 
             GameObject e = Instantiate(Resources.Load("Prefabs/Enemy") as GameObject); // Prefab MUST BE locaed in Resources/Prefab folder!
             Vector3 pos;

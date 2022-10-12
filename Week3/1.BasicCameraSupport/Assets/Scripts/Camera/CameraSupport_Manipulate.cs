@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Meant to be a component of a camera
-public partial class CameraSupport: MonoBehaviour
+public partial class CameraSupport : MonoBehaviour
 {
     public void MoveBy(float dx, float dy)
     {
@@ -40,9 +40,9 @@ public partial class CameraSupport: MonoBehaviour
     {
         Vector3 delta = aPos - transform.position;
         delta *= (zoom - 1f);
-\        delta.z = 0f;
+        delta.z = 0f;
         transform.position -= delta;
-        Zoom(zoom);
+        Zoom (zoom);
     }
 
     public void PushCameraByPos(Vector3 aPos, float region = 1f)
@@ -50,16 +50,15 @@ public partial class CameraSupport: MonoBehaviour
         Bounds b = new Bounds(transform.position, region * mWorldBound.size);
         Vector3 delta = Vector3.zero;
         if (!BoundsContainsPointXY(b, aPos))
-        {   // pos is outside, let's push
+        {
+            // pos is outside, let's push
             if (aPos.x > b.max.x)
                 delta.x = aPos.x - b.max.x;
-            else if (aPos.x < b.min.x)
-                delta.x = aPos.x - b.min.x;
+            else if (aPos.x < b.min.x) delta.x = aPos.x - b.min.x;
 
             if (aPos.y > b.max.y)
                 delta.y = aPos.y - b.max.y;
-            else if (aPos.y < b.min.y)
-                delta.y = aPos.y - b.min.y;
+            else if (aPos.y < b.min.y) delta.y = aPos.y - b.min.y;
 
             transform.position += delta;
         }

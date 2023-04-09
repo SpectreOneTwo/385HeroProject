@@ -6,17 +6,21 @@ using UnityEngine.UI;
 public class GreenUpBehaviour : MonoBehaviour
 {
     public Text mEnemyCountText = null;
-    public float speed = 10f;
+    public float initialSpeed = 20.0f;
+    public float maxSpeed = 50.0f;
+    public float minSpeed = 0f;
     public float mHeroRotateSpeed = 100f / 2f; // 90-degrees in 2 seconds
     public bool mFollowMousePosition = true;
     // Start is called before the first frame update
 
     private int mPlanesTouched = 0;
+    private float currentSpeed = 0f;
 
     private GameController mGameGameController = null;
 
     void Start()
     {
+        currentSpeed = initialSpeed;
         mGameGameController = FindObjectOfType<GameController>();
     }
 
@@ -24,9 +28,20 @@ public class GreenUpBehaviour : MonoBehaviour
 
     void Update()
     {
+
+        HandleInput();
+
+    }
+
+    private void HandleInput()
+    {
         if (Input.GetKeyDown(KeyCode.M))
         {
             mFollowMousePosition = !mFollowMousePosition;
+        }
+        else if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Application.Quit();
         }
         Vector3 pos = transform.position;
 
@@ -41,12 +56,12 @@ public class GreenUpBehaviour : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.W))
             {
-                pos += ((speed * Time.smoothDeltaTime) * transform.up);
+                pos += ((initialSpeed * Time.smoothDeltaTime) * transform.up);
             }
 
             if (Input.GetKey(KeyCode.S))
             {
-                pos -= ((speed * Time.smoothDeltaTime) * transform.up);
+                pos -= ((initialSpeed * Time.smoothDeltaTime) * transform.up);
             }
 
             if (Input.GetKey(KeyCode.D))
@@ -62,10 +77,12 @@ public class GreenUpBehaviour : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             // Prefab MUST BE locaed in Resources/Prefab folder!
-            GameObject e = Instantiate(Resources.Load("Prefabs/Egg") as GameObject); 
-            e.transform.localPosition = transform.localPosition;
-            e.transform.rotation = transform.rotation;
-            Debug.Log("Spawn Eggs:" + e.transform.localPosition);
+            GameObject egg = Instantiate(Resources.Load("Prefabs/Egg") as GameObject);
+            egg.transform.up = transform.up;
+            //egg.transform.rotation = transform.rotation;
+            Rigidbody2D eggRigidbody = egg.GetComponent<Rigidbody2D>();
+            eggRigidbody.velocity = transform.up * (currentSpeed + 40f);
+            Debug.Log("Spawn Eggs:" + egg.transform.localPosition);
         }
         transform.position = pos;
     }

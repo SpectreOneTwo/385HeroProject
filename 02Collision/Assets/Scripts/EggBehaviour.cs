@@ -24,4 +24,10 @@ public class EggBehaviour : MonoBehaviour
             Destroy(transform.gameObject);  // kills self
         }
     }
+
+    private void OnBecameInvisible()
+    {
+        HeroMovement heroMovement = FindObjectOfType<HeroMovement>();
+        Destroy(gameObject);
+    }
 }
